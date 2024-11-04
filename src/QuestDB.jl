@@ -71,7 +71,7 @@ mutable struct Sender
     sender::Ref{line_sender}
     auth::Bool
     
-    function Sender(host::String="localhost", port::Int=9009; auth=nothing, tls::Bool=false)
+    function Sender(host::String="localhost", port::Int=9009; auth=nothing, tls::Bool=false, init_capacity::Int=128*1024)
         err = Ref{Ptr{line_sender_error}}(C_NULL)
         opts = Ref{line_sender_opts}()
         sender = Ref{line_sender}()
@@ -83,7 +83,7 @@ mutable struct Sender
         pub_key_x_utf8 = Ref{line_sender_utf8}()
         pub_key_y_utf8 = Ref{line_sender_utf8}()
 
-        is_host_ok = line_sender_utf8_init(host_utf8, length(host), host, err)    
+        is_host_ok = line_sender_utf8_init(host_utf8, length(host), host, err)
 
         global buffer = line_sender_buffer_new();
         line_sender_buffer_reserve(buffer, 64 * 1024);        
@@ -107,10 +107,10 @@ mutable struct Sender
             global sender = line_sender_connect(opts, err)                                                    
             line_sender_opts_free(opts)        
             
-            if (sender == C_NULL)                                
+            if (sender == C_NULL)                        
                 return error_handler(sender, buffer, err);           
             end            
-        else            
+        else         
             error_handler(sender, buffer, err);           
         end;
                     
