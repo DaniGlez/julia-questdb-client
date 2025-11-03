@@ -2,10 +2,10 @@ using BinaryBuilder
 using BinaryBuilderBase
 
 name = "c_questdb_client"
-version = v"2.1.3"
+version = v"5.1.0"
 
-sources = [    
-    GitSource("https://github.com/questdb/c-questdb-client", "ad3776efb057d09a86a83e15c0f39ae40d75485b")
+sources = [
+    GitSource("https://github.com/questdb/c-questdb-client", "b3f08faafd10bf555d873080a8ac4604a807c011")
 ]
 
 
@@ -19,7 +19,7 @@ else
     install -D -m 755 "target/${rust_target}/release/libquestdb_client.${dlext}" "${libdir}/c_questdb_client.${dlext}"
 fi
 
-install -D -m 755 "${WORKSPACE}/srcdir/c-questdb-client/include/questdb/ilp/line_sender.h" "${includedir}/line_sender.h"
+install -D -m 755 "${WORKSPACE}/srcdir/c-questdb-client/include/questdb/ingress/line_sender.h" "${includedir}/line_sender.h"
 
 
 """
@@ -29,7 +29,7 @@ platforms = supported_platforms(exclude=Sys.islinux)
 filter!(p -> !Sys.iswindows(p) || arch(p) != "i686", platforms)
 
 # The products that we will ensure are always built
-products = [    
+products = [
     LibraryProduct("c_questdb_client", :c_questdb_client)
 ]
 
